@@ -1,0 +1,38 @@
+name: Go
+
+on:
+  push:
+    branches: [ "main", "test-gh-actions" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version:
+          - "1.13.15"
+          - "1.14.15"
+          - "1.15.15"
+          - "1.16.15"
+          - "1.17.13"
+          - "1.18.10"
+          - "1.19.13"
+          - "1.20.x"
+          - "1.21.11"
+          - "1.22.0"
+          - "1.22.3"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./...
